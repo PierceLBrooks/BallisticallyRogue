@@ -1,6 +1,6 @@
-link_directories(${PROJECT_SOURCE_DIR}/bin)
+link_directories(${PROJECT_SOURCE_DIR}/../Oublietteer/Trunk/bin)
 
-include_directories(${PROJECT_SOURCE_DIR}/extlibs/SFML/include)
+include_directories(${PROJECT_SOURCE_DIR}/../Oublietteer/Trunk/extlibs/SFML/include)
 link_libraries(sfml-system-2 sfml-window-2 sfml-graphics-2 sfml-audio-2 sfml-network-2)
 
 set(INC ${PROJECT_SOURCE_DIR}/include/br)
@@ -9,11 +9,14 @@ set(DUNG_INC ${PROJECT_SOURCE_DIR}/../Oublietteer/Trunk/include/oublietteer)
 set(DUNG_SRC ${PROJECT_SOURCE_DIR}/../Oublietteer/Trunk/src/oublietteer)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/../Oublietteer/Trunk/include)
 
 set(PROJECT_FILES
 	${SRC}/main.cpp
 	${SRC}/BallisticallyRogue.cpp
 	${INC}/BallisticallyRogue.hpp
+	${SRC}/Game.cpp
+	${INC}/Game.hpp
 	${DUNG_SRC}/Oubliette.cpp
 	${DUNG_INC}/Oubliette.hpp
 	${DUNG_SRC}/Room.cpp
