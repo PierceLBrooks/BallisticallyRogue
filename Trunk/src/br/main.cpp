@@ -32,6 +32,22 @@ int main(int argc, char** argv)
             }
         }
         window->clear(sf::Color::Black);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        {
+            application->act(br::Game::Action::MOVE_LEFT);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        {
+            application->act(br::Game::Action::MOVE_RIGHT);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        {
+            application->act(br::Game::Action::MOVE_UP);
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        {
+            application->act(br::Game::Action::MOVE_DOWN);
+        }
         deltaTime = clock->restart().asSeconds();
         application->update(window, deltaTime);
         window->display();
@@ -40,6 +56,7 @@ int main(int argc, char** argv)
             window->close();
         }
     }
+    delete clock;
     delete window;
     delete application;
     return 0;

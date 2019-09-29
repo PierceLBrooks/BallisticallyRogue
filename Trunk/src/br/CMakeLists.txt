@@ -13,10 +13,15 @@ include_directories(${PROJECT_SOURCE_DIR}/../Oublietteer/Trunk/include)
 
 set(PROJECT_FILES
 	${SRC}/main.cpp
+	${INC}/Ownable.hpp
 	${SRC}/BallisticallyRogue.cpp
 	${INC}/BallisticallyRogue.hpp
 	${SRC}/Game.cpp
 	${INC}/Game.hpp
+	${SRC}/Grid.cpp
+	${INC}/Grid.hpp
+	${SRC}/Player.cpp
+	${INC}/Player.hpp
 	${DUNG_SRC}/Oubliette.cpp
 	${DUNG_INC}/Oubliette.hpp
 	${DUNG_SRC}/Room.cpp

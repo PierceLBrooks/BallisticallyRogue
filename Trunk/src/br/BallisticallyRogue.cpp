@@ -4,7 +4,7 @@
 #include <br/BallisticallyRogue.hpp>
 
 br::BallisticallyRogue::BallisticallyRogue() :
-    Game()
+    Game(sf::Vector2u(75, 45))
 {
 
 }
