@@ -34,6 +34,7 @@ namespace br
             bool moveRight();
             bool moveUp();
             bool moveDown();
+            bool movePlayer(const sf::Vector2i& movement);
             void go(oublietteer::Room* room);
             void update(sf::RenderWindow* window, float deltaTime);
             oublietteer::Floor* getFloor() const;

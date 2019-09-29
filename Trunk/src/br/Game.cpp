@@ -4,7 +4,7 @@
 #include <br/Game.hpp>
 #include <iostream>
 
-#define TURN_TIME 0.025f
+#define TURN_TIME 0.25f
 #define PI (22.0f/7.0f)
 
 br::Game::Game(const sf::Vector2u& size)
@@ -54,31 +54,35 @@ bool br::Game::act(Action action)
 
 bool br::Game::moveLeft()
 {
-    player->move(sf::Vector2i(-1, 0));
+    movePlayer(sf::Vector2i(-1, 0));
     return true;
 }
 
 bool br::Game::moveRight()
 {
-    player->move(sf::Vector2i(1, 0));
+    movePlayer(sf::Vector2i(1, 0));
     return true;
 }
 
 bool br::Game::moveDown()
 {
-    player->move(sf::Vector2i(0, 1));
+    movePlayer(sf::Vector2i(0, 1));
     return true;
 }
 
 bool br::Game::moveUp()
 {
-    player->move(sf::Vector2i(0, -1));
+    movePlayer(sf::Vector2i(0, -1));
     return true;
+}
+
+bool br::Game::movePlayer(const sf::Vector2i& movement)
+{
+    player->move(movement);
 }
 
 void br::Game::go(oublietteer::Room* room)
 {
-    std::cout << getRoom() << " -> " << room << std::endl;
     if (room == nullptr)
     {
         return;

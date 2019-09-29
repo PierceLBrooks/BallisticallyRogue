@@ -55,7 +55,7 @@ void br::Player::move(const sf::Vector2i& movement)
                 if (std::get<1>(room->getNeighbor(i)) == this->position)
                 {
                     oublietteer::Room* neighbor = std::get<0>(room->getNeighbor(i));
-                    for (unsigned int j = 0; j != neighbor->getNeighborCount(); ++i)
+                    for (unsigned int j = 0; j != neighbor->getNeighborCount(); ++j)
                     {
                         if (std::get<0>(neighbor->getNeighbor(j)) == room)
                         {
