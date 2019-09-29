@@ -3,6 +3,7 @@
 
 #include <br/Grid.hpp>
 #include <br/Game.hpp>
+#include <iostream>
 
 br::Grid::Unit::Unit(Grid* owner, const sf::Vector2u& position) :
     Ownable(),
@@ -26,8 +27,6 @@ void br::Grid::Unit::update(sf::RenderWindow* window, float deltaTime)
     }
     shape->rotate(deltaTime);
     shape->setPosition(owner->multiply(sf::Vector2f(position), shape->getSize()));
-    shape->move(window->getView().getCenter());
-    shape->move(-owner->multiply(sf::Vector2f(owner->getOwner()->getPlayer()->getPosition()), shape->getSize()));
     window->draw(*shape);
 }
 
@@ -67,24 +66,39 @@ void br::Grid::Unit::setType(Type type)
     shape->setRotation(0.0f);
     if (type == EMPTY)
     {
-        shape->setFillColor(sf::Color::White);
+        setColor(sf::Color::White);
         return;
     }
     if (type == WALL)
     {
-        shape->setFillColor(sf::Color(192, 192, 192));
+        setColor(sf::Color(192, 192, 192));
         return;
     }
     if (type == DOOR)
     {
-        shape->setFillColor(sf::Color(64, 64, 64));
+        setColor(sf::Color(64, 64, 64));
         return;
     }
     if (type == PLAYER)
     {
-        shape->setFillColor(sf::Color(0, 128, 0));
+        setColor(sf::Color(0, 128, 0));
         return;
     }
+    if (type == STAIRS)
+    {
+        setColor(sf::Color::Black);
+        return;
+    }
+}
+
+void br::Grid::Unit::setColor(const sf::Color& color)
+{
+    if (type == PLAYER)
+    {
+        shape->setFillColor(color);
+        return;
+    }
+    shape->setFillColor(owner->multiply(color, owner->getOwner()->getFloorColor()));
 }
 
 br::Grid::Grid(Game* owner, const sf::Vector2u& size) :
@@ -117,6 +131,16 @@ br::Grid::~Grid()
     units.clear();
 }
 
+float br::Grid::magnitude(const sf::Vector2f& target)
+{
+    return sqrtf(powf(target.x, 2.0f)+powf(target.y, 2.0f));
+}
+
+float br::Grid::distance(const sf::Vector2f& left, const sf::Vector2f& right)
+{
+    return sqrtf(powf(left.x-right.x, 2.0f)+powf(left.y-right.y, 2.0f));
+}
+
 sf::Vector2f br::Grid::multiply(const sf::Vector2f& left, const sf::Vector2f& right)
 {
     return sf::Vector2f(left.x*right.x, left.y*right.y);
@@ -125,6 +149,30 @@ sf::Vector2f br::Grid::multiply(const sf::Vector2f& left, const sf::Vector2f& ri
 sf::Vector2f br::Grid::divide(const sf::Vector2f& left, const sf::Vector2f& right)
 {
     return sf::Vector2f(left.x/right.x, left.y/right.y);
+}
+
+sf::Color br::Grid::multiply(const sf::Color& left, const sf::Color& right)
+{
+    return sf::Color(static_cast<sf::Uint8>(255.0f*((static_cast<float>(left.r)/255.0f)*(static_cast<float>(right.r)/255.0f))),
+                     static_cast<sf::Uint8>(255.0f*((static_cast<float>(left.g)/255.0f)*(static_cast<float>(right.g)/255.0f))),
+                     static_cast<sf::Uint8>(255.0f*((static_cast<float>(left.b)/255.0f)*(static_cast<float>(right.b)/255.0f))),
+                     static_cast<sf::Uint8>(255.0f*((static_cast<float>(left.a)/255.0f)*(static_cast<float>(right.a)/255.0f))));
+}
+
+sf::Color br::Grid::divide(const sf::Color& left, const sf::Color& right)
+{
+    return sf::Color(static_cast<sf::Uint8>(255.0f*((static_cast<float>(left.r)/255.0f)/(static_cast<float>(right.r)/255.0f))),
+                     static_cast<sf::Uint8>(255.0f*((static_cast<float>(left.g)/255.0f)/(static_cast<float>(right.g)/255.0f))),
+                     static_cast<sf::Uint8>(255.0f*((static_cast<float>(left.b)/255.0f)/(static_cast<float>(right.b)/255.0f))),
+                     static_cast<sf::Uint8>(255.0f*((static_cast<float>(left.a)/255.0f)/(static_cast<float>(right.a)/255.0f))));
+}
+
+sf::Color br::Grid::blend(const sf::Color& left, const sf::Color& right)
+{
+    return sf::Color(static_cast<sf::Uint8>(255.0f*(1.0f-((1.0f-(static_cast<float>(left.r)/255.0f))*(1.0f-(static_cast<float>(right.r)/255.0f))))),
+                     static_cast<sf::Uint8>(255.0f*(1.0f-((1.0f-(static_cast<float>(left.g)/255.0f))*(1.0f-(static_cast<float>(right.g)/255.0f))))),
+                     static_cast<sf::Uint8>(255.0f*(1.0f-((1.0f-(static_cast<float>(left.b)/255.0f))*(1.0f-(static_cast<float>(right.b)/255.0f))))),
+                     static_cast<sf::Uint8>(255.0f*(1.0f-((1.0f-(static_cast<float>(left.a)/255.0f))*(1.0f-(static_cast<float>(right.a)/255.0f))))));
 }
 
 void br::Grid::update(sf::RenderWindow* window, float deltaTime)

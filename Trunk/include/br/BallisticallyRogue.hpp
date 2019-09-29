@@ -13,6 +13,9 @@ namespace br
         public:
             BallisticallyRogue();
             virtual ~BallisticallyRogue();
+            static oublietteer::Random* getRandom();
+        private:
+            static oublietteer::Random* random;
     };
 }
 

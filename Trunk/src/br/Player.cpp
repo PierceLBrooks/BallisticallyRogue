@@ -69,6 +69,29 @@ void br::Player::move(const sf::Vector2i& movement)
             }
             return;
         }
+        if (owner->getLevel()->getUnit(this->position)->getType() == Grid::Unit::Type::STAIRS)
+        {
+            oublietteer::Room* room = owner->getRoom();
+            sf::Vector2u stairs = this->position;
+            if ((room->getIndex()%2 != 0) || (owner->getFloor()->getIdentifier() == 0))
+            {
+                owner->moveFloor(1);
+            }
+            else
+            {
+                owner->moveFloor(-1);
+            }
+            room = owner->getFloor()->getRoom(0);
+            owner->go(room);
+            this->position = sf::Vector2u(sf::Vector2f(room->getSize())*0.5f);
+            while ((owner->getLevel()->getUnit(this->position)->getType() != Grid::Unit::Type::EMPTY) || (owner->getLevel()->distance(sf::Vector2f(this->position), sf::Vector2f(stairs)) < 5.0f))
+            {
+                ++this->position.x;
+                ++this->position.y;
+            }
+            owner->getLevel()->getUnit(this->position)->setType(Grid::Unit::Type::PLAYER);
+            return;
+        }
         owner->getLevel()->getUnit(this->position)->setType(Grid::Unit::Type::PLAYER);
         isActing = true;
     }

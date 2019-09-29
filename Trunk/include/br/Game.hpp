@@ -11,6 +11,9 @@
 #include <oublietteer/Floor.hpp>
 #include <oublietteer/Oubliette.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Image.hpp>
 
 typedef oublietteer::Oubliette Dungeon;
 
@@ -35,12 +38,14 @@ namespace br
             bool moveUp();
             bool moveDown();
             bool movePlayer(const sf::Vector2i& movement);
+            bool moveFloor(int direction);
             void go(oublietteer::Room* room);
             void update(sf::RenderWindow* window, float deltaTime);
             oublietteer::Floor* getFloor() const;
             oublietteer::Room* getRoom() const;
             Player* getPlayer() const;
             Grid* getLevel() const;
+            sf::Color getFloorColor() const;
         protected:
             float turn;
             int floor;
@@ -49,6 +54,9 @@ namespace br
             Grid* grid;
             Grid* level;
             Player* player;
+            sf::Texture* mapTexture;
+            sf::Sprite* mapSprite;
+            sf::Image* mapImage;
     };
 }
 

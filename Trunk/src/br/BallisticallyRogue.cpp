@@ -11,5 +11,17 @@ br::BallisticallyRogue::BallisticallyRogue() :
 
 br::BallisticallyRogue::~BallisticallyRogue()
 {
-
+    delete random;
+    random = nullptr;
 }
+
+oublietteer::Random* br::BallisticallyRogue::getRandom()
+{
+    if (random == nullptr)
+    {
+        random = new oublietteer::Random();
+    }
+    return random;
+}
+
+oublietteer::Random* br::BallisticallyRogue::random = nullptr;

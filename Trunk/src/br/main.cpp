@@ -10,8 +10,14 @@
 
 typedef br::BallisticallyRogue Application;
 
+void report(const sf::Vector2f& target)
+{
+    std::cout << target.x << "  " << target.y << std::endl;
+}
+
 int main(int argc, char** argv)
 {
+    sf::Vector2f center;
     float deltaTime;
     Application* application = new Application();
     sf::Clock* clock = new sf::Clock();
@@ -31,7 +37,10 @@ int main(int argc, char** argv)
                     break;
             }
         }
+        center = application->getLevel()->multiply(sf::Vector2f(application->getPlayer()->getPosition()), application->getLevel()->getUnitSize());
+        //report(center);
         window->clear(sf::Color::Black);
+        window->setView(sf::View(center, sf::Vector2f(window->getSize())));
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
         {
             application->act(br::Game::Action::MOVE_LEFT);

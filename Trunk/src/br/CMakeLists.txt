@@ -22,6 +22,10 @@ set(PROJECT_FILES
 	${INC}/Grid.hpp
 	${SRC}/Player.cpp
 	${INC}/Player.hpp
+	${SRC}/Bullet.cpp
+	${INC}/Bullet.hpp
+	${SRC}/Enemy.cpp
+	${INC}/Enemy.hpp
 	${DUNG_SRC}/Oubliette.cpp
 	${DUNG_INC}/Oubliette.hpp
 	${DUNG_SRC}/Room.cpp
