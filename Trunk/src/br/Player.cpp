@@ -6,21 +6,40 @@
 #include <br/Game.hpp>
 #include <iostream>
 
+#define SHOOT_TIME 0.3f
+
 br::Player::Player(Game* owner, const sf::Vector2u& position) :
-    Ownable(),
+    Ownable<Game*>(),
     owner(owner),
     position(position)
 {
     isActing = false;
+    turn = 0.0f;
+    texture = new sf::Texture();
+    texture->loadFromFile("./Assets/player.png");
+    sprite = new sf::Sprite(*texture);
+    sprite->setOrigin(sf::Vector2f(texture->getSize())*0.5f);
 }
 
 br::Player::~Player()
 {
-
+    delete sprite;
+    delete texture;
 }
 
-void br::Player::act()
+bool br::Player::shoot()
 {
+    if (turn <= 0.0f)
+    {
+        turn = SHOOT_TIME;
+        return true;
+    }
+    return false;
+}
+
+void br::Player::act(float deltaTime)
+{
+    turn -= deltaTime;
     isActing = false;
 }
 
@@ -84,7 +103,7 @@ void br::Player::move(const sf::Vector2i& movement)
             room = owner->getFloor()->getRoom(0);
             owner->go(room);
             this->position = sf::Vector2u(sf::Vector2f(room->getSize())*0.5f);
-            while ((owner->getLevel()->getUnit(this->position)->getType() != Grid::Unit::Type::EMPTY) || (owner->getLevel()->distance(sf::Vector2f(this->position), sf::Vector2f(stairs)) < 5.0f))
+            while ((owner->getLevel()->getUnit(this->position)->getType() != Grid::Unit::Type::EMPTY) || (owner->getLevel()->distance(sf::Vector2f(this->position), sf::Vector2f(stairs)) < 3.0f))
             {
                 ++this->position.x;
                 ++this->position.y;
@@ -100,6 +119,11 @@ void br::Player::move(const sf::Vector2i& movement)
 br::Game* br::Player::getOwner() const
 {
     return owner;
+}
+
+sf::Sprite* br::Player::getSprite() const
+{
+    return sprite;
 }
 
 const sf::Vector2u& br::Player::getPosition() const

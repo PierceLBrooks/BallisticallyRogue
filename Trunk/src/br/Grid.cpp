@@ -6,7 +6,7 @@
 #include <iostream>
 
 br::Grid::Unit::Unit(Grid* owner, const sf::Vector2u& position) :
-    Ownable(),
+    Ownable<Grid*>(),
     owner(owner),
     position(position),
     type(INVALID)
@@ -28,6 +28,13 @@ void br::Grid::Unit::update(sf::RenderWindow* window, float deltaTime)
     shape->rotate(deltaTime);
     shape->setPosition(owner->multiply(sf::Vector2f(position), shape->getSize()));
     window->draw(*shape);
+    if (type == PLAYER)
+    {
+        sf::Sprite* player = owner->getOwner()->getPlayer()->getSprite();
+        player->setScale(shape->getSize().x/static_cast<float>(player->getTexture()->getSize().x), shape->getSize().y/static_cast<float>(player->getTexture()->getSize().y));
+        player->setPosition(shape->getPosition());
+        window->draw(*player);
+    }
 }
 
 const sf::Vector2u& br::Grid::Unit::getPosition() const
@@ -103,7 +110,7 @@ void br::Grid::Unit::setColor(const sf::Color& color)
 
 br::Grid::Grid(Game* owner, const sf::Vector2u& size) :
     sf::Transformable(),
-    Ownable(),
+    Ownable<Game*>(),
     owner(owner),
     size(size)
 {
@@ -141,6 +148,11 @@ float br::Grid::distance(const sf::Vector2f& left, const sf::Vector2f& right)
     return sqrtf(powf(left.x-right.x, 2.0f)+powf(left.y-right.y, 2.0f));
 }
 
+float br::Grid::direction(const sf::Vector2f& left, const sf::Vector2f& right)
+{
+    return atan2f(right.y-left.y, right.x-left.x);
+}
+
 sf::Vector2f br::Grid::multiply(const sf::Vector2f& left, const sf::Vector2f& right)
 {
     return sf::Vector2f(left.x*right.x, left.y*right.y);
@@ -173,6 +185,14 @@ sf::Color br::Grid::blend(const sf::Color& left, const sf::Color& right)
                      static_cast<sf::Uint8>(255.0f*(1.0f-((1.0f-(static_cast<float>(left.g)/255.0f))*(1.0f-(static_cast<float>(right.g)/255.0f))))),
                      static_cast<sf::Uint8>(255.0f*(1.0f-((1.0f-(static_cast<float>(left.b)/255.0f))*(1.0f-(static_cast<float>(right.b)/255.0f))))),
                      static_cast<sf::Uint8>(255.0f*(1.0f-((1.0f-(static_cast<float>(left.a)/255.0f))*(1.0f-(static_cast<float>(right.a)/255.0f))))));
+}
+
+sf::Color br::Grid::invert(const sf::Color& target)
+{
+    return sf::Color(static_cast<sf::Uint8>(255.0f*(1.0f-(static_cast<float>(target.r)/255.0f))),
+                     static_cast<sf::Uint8>(255.0f*(1.0f-(static_cast<float>(target.g)/255.0f))),
+                     static_cast<sf::Uint8>(255.0f*(1.0f-(static_cast<float>(target.b)/255.0f))),
+                     static_cast<sf::Uint8>(255.0f*(1.0f-(static_cast<float>(target.a)/255.0f))));
 }
 
 void br::Grid::update(sf::RenderWindow* window, float deltaTime)

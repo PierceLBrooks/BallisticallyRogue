@@ -41,26 +41,30 @@ int main(int argc, char** argv)
         //report(center);
         window->clear(sf::Color::Black);
         window->setView(sf::View(center, sf::Vector2f(window->getSize())));
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
         {
             application->act(br::Game::Action::MOVE_LEFT);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
         {
             application->act(br::Game::Action::MOVE_RIGHT);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
         {
             application->act(br::Game::Action::MOVE_UP);
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
         {
             application->act(br::Game::Action::MOVE_DOWN);
         }
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+        {
+            application->act(br::Game::Action::SHOOT);
+        }
         deltaTime = clock->restart().asSeconds();
-        application->update(window, deltaTime);
+        application->update(window, deltaTime, sf::Keyboard::isKeyPressed(sf::Keyboard::Key::M));
         window->display();
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape))
         {
             window->close();
         }

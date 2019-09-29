@@ -49,11 +49,13 @@ namespace br
             virtual ~Grid();
             static float magnitude(const sf::Vector2f& target);
             static float distance(const sf::Vector2f& left, const sf::Vector2f& right);
+            static float direction(const sf::Vector2f& left, const sf::Vector2f& right);
             static sf::Vector2f multiply(const sf::Vector2f& left, const sf::Vector2f& right);
             static sf::Vector2f divide(const sf::Vector2f& left, const sf::Vector2f& right);
             static sf::Color multiply(const sf::Color& left, const sf::Color& right);
             static sf::Color divide(const sf::Color& left, const sf::Color& right);
             static sf::Color blend(const sf::Color& left, const sf::Color& right);
+            static sf::Color invert(const sf::Color& target);
             void update(sf::RenderWindow* window, float deltaTime);
             Unit* getUnit(const sf::Vector2u& position) const;
             Game* getOwner() const;
